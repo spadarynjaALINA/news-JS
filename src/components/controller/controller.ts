@@ -1,7 +1,10 @@
 import AppLoader from './appLoader';
-
+import IOptions from './loader';
+import { INewsJSON } from './loader';
+import  TNewsJSON from './loader'
 class AppController extends AppLoader {
-    getSources(callback) {
+  getSources(callback:(data: INewsJSON) => void) {
+ console.log(callback)
         super.getResp(
             {
                 endpoint: 'sources',
@@ -10,15 +13,16 @@ class AppController extends AppLoader {
         );
     }
 
-    getNews(e, callback) {
-        let target = e.target;
-        const newsContainer = e.currentTarget;
+    getNews(e:Event, callback:(data:INewsJSON)=> void) {
+      let target = e.target as HTMLElement;
+
+        const newsContainer = e.currentTarget as HTMLElement ;
 
         while (target !== newsContainer) {
             if (target.classList.contains('source__item')) {
-                const sourceId = target.getAttribute('data-source-id');
-                if (newsContainer.getAttribute('data-source') !== sourceId) {
-                    newsContainer.setAttribute('data-source', sourceId);
+                const sourceId= target.getAttribute('data-source-id') as string;
+                if (newsContainer?.getAttribute('data-source') !== sourceId) {
+                    newsContainer?.setAttribute('data-source', sourceId);
                     super.getResp(
                         {
                             endpoint: 'everything',
@@ -31,7 +35,7 @@ class AppController extends AppLoader {
                 }
                 return;
             }
-            target = target.parentNode;
+            target  = target.parentNode as HTMLElement;
         }
     }
 }
